@@ -27,6 +27,7 @@ public class NPC : MonoBehaviour
             // Use the GetPositionAwayFromPlayer() method to set this object's
             //      NavMeshAgent destination.
             // If used properly, this will make the NPC run away from the player.
+            _navAgent.SetDestination(GetPositionAwayFromPlayer());
         }
 
         _animator.SetBool("running", _navAgent.velocity.magnitude > 0.0f);
@@ -48,7 +49,7 @@ public class NPC : MonoBehaviour
     
     // ------------------------------------------------------------------------
     // You don't need to code anything in this method :)
-    public void PickUp ()
+    public void PickUp()
     {
         _wasCaptured = true;
         _navAgent.enabled = false;
@@ -61,4 +62,12 @@ public class NPC : MonoBehaviour
     // IF this NPC was previously captured in the Katamari,
     //      then when it collides with something,
     //      it should explode.
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (_wasCaptured && transform.parent == null)
+        {
+            // _explosionVFX.SetActive(true);
+            Destroy(gameObject);
+        }
+    }
 }

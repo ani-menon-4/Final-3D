@@ -43,6 +43,17 @@ public class Player : MonoBehaviour
         float vertical = Input.GetAxis("Vertical");
         float horizontal = Input.GetAxis("Horizontal");
         
+        transform.Translate(
+            ((Vector3.forward * vertical) + (Vector3.right * horizontal))
+             * _moveSpeed
+             * Time.deltaTime
+        );
+        
+        if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
+        {
+            _playerRigidbody.AddForce(Vector3.up * _jump, ForceMode.Impulse);
+            _isGrounded = false;
+        }
 
         // This rotates the ball as you move.
         // You don't need to change this code.
@@ -56,4 +67,11 @@ public class Player : MonoBehaviour
     // ------------------------------------------------------------------------
     // Utilize a COLLISION method to prevent the player from double jumping.
     // The player should only be able to jump after making contact with the ground.
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            _isGrounded = true;
+        }
+    }
 }

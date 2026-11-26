@@ -1,4 +1,6 @@
+using System;
 using TMPro;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +12,16 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _gameOverUI;
 
     // Add member variables to store references to all of the UI text.
+    [SerializeField] private TMP_Text _textStart;
+    [SerializeField] private TMP_Text _textGameOver;
+    [SerializeField] private TMP_Text _textCommonMult;
+    [SerializeField] private TMP_Text _textUncommonMult;
+    [SerializeField] private TMP_Text _textRareMult;
+    [SerializeField] private TMP_Text _textFinalCommon;
+    [SerializeField] private TMP_Text _textFinalUncommon;
+    [SerializeField] private TMP_Text _textFinalRare;
+    [SerializeField] private TMP_Text _textTotal;
+    [SerializeField] private TMP_Text _textRestart;
 
     private int _commonPoints;
     private int _uncommonPoints;
@@ -69,6 +81,10 @@ public class GameController : MonoBehaviour
         _gameOverUI.SetActive(true);
 
         // Update the final score text in the game over UI.
+        _textFinalCommon.text = _commonPoints + " common";
+        _textFinalUncommon.text = _uncommonPoints + " uncommon";
+        _textFinalRare.text = _rarePoints + " rare";
+        _textTotal.text = "Final Score: " + _commonPoints + _uncommonPoints + _rarePoints;
     }
 
     // ------------------------------------------------------------------------
@@ -82,21 +98,44 @@ public class GameController : MonoBehaviour
 
     // ------------------------------------------------------------------------
     // Add a paramter to this method to represent the item's rarity.
-    public void CollectItem ()
+    public void CollectItem(Rarity itemRarity)
     {
         // Using a SWITCH STATEMENT,
         // based on the item's rarity, update the appropriate points variable.
-        
+        switch(itemRarity)
+        {
+            case Rarity.common:
+                _commonPoints++;
+                break;
+            case Rarity.uncommon:
+                _uncommonPoints++;
+                break;
+            case Rarity.rare:
+                _rarePoints++;
+                break;
+        }
 
         UpdatePointsText();
     }
 
     // ------------------------------------------------------------------------
-    public void RemoveItem ()
+    public void RemoveItem(Rarity itemRarity)
     {
         // Using a SWITCH STATEMENT,
         // based on the item's rarity, update the appropriate points variable.
-        
+        switch(itemRarity)
+        {
+            case Rarity.common:
+                _commonPoints--;
+                break;
+            case Rarity.uncommon:
+                _uncommonPoints--;
+                break;
+            case Rarity.rare:
+                _rarePoints--;
+                break;
+        }
+
         UpdatePointsText();
     }
 
